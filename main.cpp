@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Renderer.hpp"
 #include "Utils.hpp"
@@ -27,12 +28,19 @@ int main() {
 	}
 	glfwMakeContextCurrent(_window);
 
+	if (glewInit() != GLEW_OK) {
+		const GLubyte* err = glewGetErrorString(glewInit());
+		log_error(err);
+		glfwTerminate();
+		exit(1);
+	}
+
 	Renderer renderer;
+
 	while (!glfwWindowShouldClose(_window)) {
 		glfwPollEvents();
 		glfwSwapBuffers(_window);
 		renderer.render();
-		// TODO
 	}
 	glfwDestroyWindow(_window);
 	glfwTerminate();
