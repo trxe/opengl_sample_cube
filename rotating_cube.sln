@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32825.248
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rotating_cube", "rotating_cube.vcxproj", "{EF00E588-80EB-4029-AA85-02DED1535690}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Debug|x64.ActiveCfg = Debug|x64
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Debug|x64.Build.0 = Debug|x64
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Debug|x86.ActiveCfg = Debug|Win32
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Debug|x86.Build.0 = Debug|Win32
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Release|x64.ActiveCfg = Release|x64
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Release|x64.Build.0 = Release|x64
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Release|x86.ActiveCfg = Release|Win32
+		{EF00E588-80EB-4029-AA85-02DED1535690}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8204C2D6-7F29-4042-9208-7B859D0F9122}
+	EndGlobalSection
+EndGlobal
