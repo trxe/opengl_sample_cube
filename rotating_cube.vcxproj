@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\third_party\glew\include;$(ProjectDir)\third_party\glfw\include;$(ProjectDir)\third_party\glm;$(ProjectDir)\third_party\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\third_party\glew\include;$(ProjectDir)\third_party\glfw\include;$(ProjectDir)\third_party\glm\*;$(ProjectDir)\third_party\glm;$(ProjectDir)\third_party\tinyobjloader;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -132,9 +132,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Object.hpp" />
     <ClInclude Include="Renderer.hpp" />
     <ClInclude Include="Utils.hpp" />
   </ItemGroup>

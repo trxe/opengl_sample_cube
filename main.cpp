@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+#define TINYOBJLOADER_IMPLEMENTATION
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Renderer.hpp"
@@ -9,6 +10,12 @@
 static GLFWwindow* _window = nullptr;
 static void glfw_callback_error(int error, const char* msg) {
 	log_error(msg);
+}
+static void glfw_callback_window_size(GLFWwindow* window, int width, int height) {
+	Renderer* renderer = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(_window));
+	renderer->set_window_size(width, height);
+	glfwSwapBuffers(_window);
+	renderer->render();
 }
 
 int main() {
@@ -35,13 +42,19 @@ int main() {
 		exit(1);
 	}
 
-	Renderer renderer;
-
-	while (!glfwWindowShouldClose(_window)) {
-		glfwPollEvents();
-		glfwSwapBuffers(_window);
-		renderer.render();
+	try {
+		Renderer renderer;
+		glfwSetWindowUserPointer(_window, reinterpret_cast<void*>(&renderer));
+		glfwSetWindowSizeCallback(_window, glfw_callback_window_size);
+		while (!glfwWindowShouldClose(_window)) {
+			glfwPollEvents();
+			renderer.render();
+			glfwSwapBuffers(_window);
+		}
+	} catch (const std::exception& e) {
+		log_error(e.what());
 	}
+
 	glfwDestroyWindow(_window);
 	glfwTerminate();
 	return 0;
