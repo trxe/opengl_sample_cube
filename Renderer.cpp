@@ -9,16 +9,6 @@
 Renderer::Renderer() {
 
 	{
-		// eye at dir
-		vec3 eye{ 2.0, 4.0, 6.0 };
-		vec3 at{ 0.0, 0.0, 0.0 };
-		vec3 up{ 0.0, 1.0, 0.0 };
-		m_view_matrix = glm::lookAt(eye, at, up);
-		float ar = aspect_ratio();
-		m_clip_matrix = glm::perspective(glm::radians(45.0f), ar, 0.01f, 100.0f);
-	}
-
-	{
 		auto& c = m_clear_color;
 		glClearColor(c.r, c.g, c.b, 1.0);
 	}
@@ -79,8 +69,8 @@ void Renderer::render() {
 	glUseProgram(m_shader_program_id);
 	float time_ns = static_cast<float>(glfwGetTime());
 	glUniform1f(m_time_uni, time_ns);
-	glUniformMatrix4fv(m_clip_uni, 1, GL_FALSE, &m_clip_matrix[0][0]);
-	glUniformMatrix4fv(m_view_uni, 1, GL_FALSE, &m_view_matrix[0][0]);
+	glUniformMatrix4fv(m_clip_uni, 1, GL_FALSE, &camera.clip_matrix()[0][0]);
+	glUniformMatrix4fv(m_view_uni, 1, GL_FALSE, &camera.view_matrix()[0][0]);
 	for (auto& obj : m_objects) {
 		obj.world_mat = glm::rotate(obj.world_mat, glm::radians(1.0f / 60.0f), vec3(0.0, 1.0, 0.0));
 		glUniformMatrix4fv(m_world_uni, 1, GL_FALSE, &obj.world_mat[0][0]);

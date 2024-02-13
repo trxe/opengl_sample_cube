@@ -17,6 +17,11 @@ static void glfw_callback_window_size(GLFWwindow* window, int width, int height)
 	glfwSwapBuffers(_window);
 	renderer->render();
 }
+static void glfw_callback_scroll(GLFWwindow* window, double xoffset, double yoffset) {
+	Renderer* renderer = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(_window));
+	renderer->input_scroll(xoffset, yoffset);
+}
+
 
 int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -46,6 +51,7 @@ int main() {
 		Renderer renderer;
 		glfwSetWindowUserPointer(_window, reinterpret_cast<void*>(&renderer));
 		glfwSetWindowSizeCallback(_window, glfw_callback_window_size);
+		glfwSetScrollCallback(_window, glfw_callback_scroll);
 		while (!glfwWindowShouldClose(_window)) {
 			glfwPollEvents();
 			renderer.render();

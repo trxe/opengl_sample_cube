@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <vector>
 #include "Object.hpp"
+#include "Camera.hpp"
 namespace fs = std::filesystem;
 using namespace glm;
 
@@ -38,24 +39,22 @@ public:
 	Renderer();
 	~Renderer();
 	void render();
-	float aspect_ratio() {
-		return (float)m_window_size.r / (float)m_window_size.g;
-	}
 	void set_window_size(int w, int h) {
-		m_window_size = { w, h };
+		camera.set_resolution(w, h);
 	}
 
 	// world translate/rotate/zoom callbacks
+	void input_scroll(double xoffset, double yoffset) {
+		camera.zoom(yoffset);
+	}
 
 	// view translate/rotate/zoom callbacks
 
 private:
-	ivec2 m_window_size{1920, 1080};
+	Camera camera{};
 	vec3 m_clear_color{0.0, 0.0, 0.0};
 	std::vector<vec3> m_cpu_vertices{};
 	std::vector<GLchar> m_cpu_indices{};
-	mat4 m_clip_matrix{};
-	mat4 m_view_matrix{};
 
 	GLuint m_shader_program_id;
 	std::vector<Object> m_objects;

@@ -134,8 +134,10 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Object.hpp" />
     <ClInclude Include="Renderer.hpp" />
     <ClInclude Include="Utils.hpp" />
