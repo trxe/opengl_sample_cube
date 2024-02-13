@@ -21,7 +21,8 @@ struct Object {
 	mat4 world_mat{1.0};
 
 	unsigned int m_vao;
-	unsigned int m_vbo;
+	unsigned int m_vbo_pos;
+	unsigned int m_vbo_norm;
 	unsigned int m_ibo;
 
 	void gl_bind_and_draw();

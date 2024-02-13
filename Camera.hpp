@@ -7,6 +7,7 @@ class Camera {
 public:
 	Camera();
 	Camera(const vec3& eye, const vec3& at, const vec3& up, float fovy, const ivec2& resolution);
+	const vec3& cam_pos() { return eye; }
 	const mat4& clip_matrix() { return m_clip_matrix; }
 	const mat4& view_matrix() { return m_view_matrix; }
 	void set_resolution(int w, int h);

@@ -2,7 +2,7 @@
 
 Object::~Object() {
 	glDeleteBuffers(1, &m_ibo);
-	glDeleteBuffers(1, &m_vbo);
+	glDeleteBuffers(1, &m_vbo_pos);
 	glDeleteVertexArrays(1, &m_vao);
 }
 
@@ -10,8 +10,8 @@ void Object::gl_instantiate() {
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
-	glGenBuffers(1, &m_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+	glGenBuffers(1, &m_vbo_pos);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo_pos);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vec3) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3), (void*)0);
 	glEnableVertexAttribArray(0);
