@@ -4,6 +4,7 @@
 #include <vector>
 #include "Object.hpp"
 #include "Camera.hpp"
+#include "Material.hpp"
 namespace fs = std::filesystem;
 using namespace glm;
 
@@ -87,6 +88,9 @@ uniform vec3 light_pos;
 uniform vec3 light_col;
 uniform float light_intensity;
 uniform sampler2D albedo_map;
+uniform sampler2D normal_map;
+uniform sampler2D displacement_map;
+uniform sampler2D occlusion_map;
 
 in vec3 world_pos;
 in vec3 world_norm;
@@ -95,7 +99,7 @@ in vec2 uv;
 out vec4 fragColor;
 
 void main() {
-	vec3 albedo = texture(albedo_map, uv).rgb;
+	vec3 albedo = texture(normal_map, uv).rgb;
 	vec3 l = normalize(light_pos - world_pos);
 	vec3 primary = light_col * albedo * max(0.1, dot(world_norm, l)) * light_intensity;
 	vec3 r = reflect(l, world_norm);
@@ -118,8 +122,6 @@ public:
 		else rot_speed = 0.0f;
 	}
 
-	void add_albedo_map(const fs::path& fp);
-
 	void add_object_from_fp(const fs::path& fp) {
 		m_objects.emplace_back(fp);
 	}
@@ -129,6 +131,8 @@ public:
 	void input_scroll(double xoffset, double yoffset) {
 		camera.zoom(yoffset);
 	}
+
+	void set_map_dir(const fs::path& dir, const char* prefix);
 
 private:
 	Camera camera{};
@@ -149,6 +153,7 @@ private:
 
 	unsigned int m_albedo;
 	unsigned int m_normal;
+	Material m_material;
 
 	// Light
 	vec3 light_pos{ 2.0, 4.0, 3.0 };

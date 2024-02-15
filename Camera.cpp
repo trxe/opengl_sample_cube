@@ -1,5 +1,6 @@
 #include "Camera.hpp"
 #include <gtc/matrix_transform.hpp> 
+#include <iostream>
 
 Camera::Camera() {
 	m_view_matrix = glm::lookAt(eye, at, up);

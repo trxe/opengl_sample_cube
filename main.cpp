@@ -2,7 +2,6 @@
 #include <string>
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Renderer.hpp"
@@ -38,7 +37,7 @@ int main() {
 		log_error("GLFW failed to initialize");
 		exit(1);
 	}
-	_window = glfwCreateWindow(1920, 1080, "Rotating Cube", NULL, NULL);
+	_window = glfwCreateWindow(DEFAULT_RES_W, DEFAULT_RES_H, "Rotating Cube", NULL, NULL);
 	if (!_window) {
 		log_error("GLFW Window not created");
 		glfwTerminate();
@@ -60,7 +59,7 @@ int main() {
 		glfwSetScrollCallback(_window, glfw_callback_scroll);
 		glfwSetKeyCallback(_window, glfw_callback_key);
 		renderer.add_object_from_fp(fs::current_path() / "data" / "sphere.obj");
-		renderer.add_albedo_map(fs::current_path() / "data" / "textures" / "Encrusted_Gems_002_SD"  / "Encrusted_Gems_002_COLOR.jpg");
+		renderer.set_map_dir(fs::current_path() / "data" / "textures" / "Encrusted_Gems_002_SD" , "Encrusted_Gems_002");
 		while (!glfwWindowShouldClose(_window)) {
 			glfwPollEvents();
 			renderer.render();

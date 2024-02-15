@@ -1,8 +1,13 @@
 #include "Material.hpp"
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "Utils.hpp"
 
 Material::Material(const fs::path& parent, const fs::path& filename_albedo, const fs::path& filename_normal, const fs::path& filename_displacement, const fs::path& filename_occlusion) {
+	set(parent, filename_albedo, filename_normal, filename_displacement, filename_occlusion);
+}
+
+void Material::set(const fs::path& parent, const fs::path& filename_albedo, const fs::path& filename_normal, const fs::path& filename_displacement, const fs::path& filename_occlusion) {
 	init_texture(parent / filename_albedo, albedo, albedo_slot, "albedo_map");
 	init_texture(parent / filename_normal, normal, normal_slot, "normal_map");
 	init_texture(parent / filename_displacement, displacement, displacement_slot, "displacement_map");
@@ -41,14 +46,14 @@ void Material::bind_and_use_textures(unsigned int program) {
 
 	glActiveTexture(normal_slot);
 	glBindTexture(GL_TEXTURE_2D, normal);
-	glUniform1i(glGetUniformLocation(program, "normal_map"), 0);
+	glUniform1i(glGetUniformLocation(program, "normal_map"), 1);
 
 	glActiveTexture(displacement_slot);
 	glBindTexture(GL_TEXTURE_2D, displacement);
-	glUniform1i(glGetUniformLocation(program, "displacement_map"), 0);
+	glUniform1i(glGetUniformLocation(program, "displacement_map"), 2);
 
 	glActiveTexture(occlusion_slot);
 	glBindTexture(GL_TEXTURE_2D, occlusion);
-	glUniform1i(glGetUniformLocation(program, "occlusion_map"), 0);
+	glUniform1i(glGetUniformLocation(program, "occlusion_map"), 3);
 
 }

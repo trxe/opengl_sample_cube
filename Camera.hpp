@@ -1,5 +1,6 @@
 #pragma once 
 #include <glm.hpp>
+#include "Utils.hpp"
 
 using namespace glm;
 
@@ -15,12 +16,14 @@ public:
 		return (float)resolution.x / (float)resolution.y;
 	}
 	void zoom(float amount, float scale = 0.1f);
+	int w() { return resolution.x; }
+	int h() { return resolution.y; }
 
 private:
 	vec3 eye{ 2.0, 4.0, 6.0 };
 	vec3 at{ 0.0, 0.0, 0.0 };
 	vec3 up{ 0.0, 1.0, 0.0 };
-	ivec2 resolution{1920, 1080};
+	ivec2 resolution{DEFAULT_RES_W, DEFAULT_RES_H};
 	float near{ 0.01f };
 	float far{ 100.0f };
 	float fovy{glm::radians(45.0f)};

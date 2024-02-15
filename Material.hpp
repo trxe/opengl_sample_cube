@@ -5,7 +5,15 @@
 namespace fs = std::filesystem;
 
 struct Material {
-	Material(const fs::path& parent, const fs::path& filename_albedo, const fs::path& filename_normal, const fs::path& filename_displacement, const fs::path& filename_occlusion);
+	Material() {}
+	Material(const fs::path& parent, const fs::path& filename_albedo, 
+		const fs::path& filename_normal, 
+		const fs::path& filename_displacement, 
+		const fs::path& filename_occlusion);
+	void set(const fs::path& parent, const fs::path& filename_albedo, 
+		const fs::path& filename_normal, 
+		const fs::path& filename_displacement, 
+		const fs::path& filename_occlusion);
 	void bind_and_use_textures(unsigned int program);
 
 private:

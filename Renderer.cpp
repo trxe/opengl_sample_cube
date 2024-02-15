@@ -3,8 +3,10 @@
 #include <gtc/matrix_transform.hpp>
 #include <iostream>
 #include <fstream>
+/*
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+*/
 #include "Renderer.hpp"
 #include "Utils.hpp"
 
@@ -70,32 +72,12 @@ Renderer::~Renderer() {
 	glDeleteProgram(m_shader_program_id);
 }
 
-void Renderer::add_albedo_map(const fs::path& fp) {
-	glActiveTexture(GL_TEXTURE0);
-	glGenTextures(1, &m_albedo);
-	glBindTexture(GL_TEXTURE_2D, m_albedo);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load image, create texture and generate mipmaps
-	int width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true); 
-	unsigned char* data = stbi_load(fp.string().c_str(), &width, &height, &nrChannels, 0);
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else {
-		log_error(std::format("failed to load texture {}", fp.string()));
-	}
-	stbi_image_free(data);
-
-	glUseProgram(m_shader_program_id);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_albedo);
-	glUniform1i(glGetUniformLocation(m_shader_program_id, "albedo_map"), 0);
+void Renderer::set_map_dir(const fs::path& dir, const char* prefix) {
+	std::string fp_albedo = std::format("{}_{}.jpg", prefix, "COLOR");
+	std::string fp_normal = std::format("{}_{}.jpg", prefix, "NORM");
+	std::string fp_displace = std::format("{}_{}.png", prefix, "DISP");
+	std::string fp_occlusion = std::format("{}_{}.jpg", prefix, "OCC");
+	m_material.set(dir, fp_albedo, fp_normal, fp_displace, fp_occlusion);
 }
 
 void Renderer::render() {
@@ -109,6 +91,7 @@ void Renderer::render() {
 	glUniform3fv(m_light_pos_uni, 1, &light_pos[0]);
 	glUniform3fv(m_light_col_uni, 1, &light_col[0]);
 	glUniform1fv(m_light_intensity_uni, 1, &light_intensity);
+	glViewport(0, 0, camera.w(), camera.h());
 	for (auto& obj : m_objects) {
 		obj.world_mat = glm::rotate(obj.world_mat, glm::radians(rot_speed / 60.0f), vec3(0.0, 1.0, 0.0));
 		glUniformMatrix4fv(m_world_uni, 1, GL_FALSE, &obj.world_mat[0][0]);
