@@ -1,5 +1,6 @@
 #pragma once
 #include <chrono>
+#include <iostream>
 
 template<typename T>
 void log_error(const T& msg) {

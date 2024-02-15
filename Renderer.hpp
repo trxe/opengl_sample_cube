@@ -12,23 +12,28 @@ namespace shaders {
 static const GLchar* vert = R"(
 #version 330 core
 layout (location = 0) in vec3 pos;
+layout (location = 1) in vec3 norm;
+layout (location = 2) in vec2 texcoord;
 
 uniform mat4 world_mat;
 uniform mat4 view_mat;
 uniform mat4 clip_mat;
 uniform float time;
 
-out VS_OUT {
-    vec3 world_pos;
-} vs_out;
+out vec3 world_pos;
+out vec3 world_norm;
+out vec2 uv;
 
 void main() {
 	vec4 world_pos_4 = world_mat * vec4(pos, 1.0);
-	vs_out.world_pos = world_pos_4.xyz;
+	world_pos = world_pos_4.xyz;
+	world_norm = (world_mat * vec4(norm, 1.0)).xyz;
+	uv = texcoord;
 	gl_Position = clip_mat * view_mat * world_pos_4;
 }
 )";
 
+/*
 static const GLchar* geom = R"(
 #version 330 core
 layout (triangles) in;
@@ -72,24 +77,29 @@ void main() {
 	EndPrimitive();
 } 
 )";
+*/
 
 static const GLchar* frag = R"(
 #version 330 core
+
 uniform vec3 cam_pos;
 uniform vec3 light_pos;
 uniform vec3 light_col;
 uniform float light_intensity;
-in vec3 albedo;
-in vec3 normal;
-in vec3 frag_world_pos;
+uniform sampler2D albedo_map;
+
+in vec3 world_pos;
+in vec3 world_norm;
+in vec2 uv;
 
 out vec4 fragColor;
 
 void main() {
-	vec3 l = normalize(light_pos - frag_world_pos);
-	vec3 primary = light_col * albedo * max(0.1, dot(normal, l)) * light_intensity;
-	vec3 r = reflect(l, normal);
-	vec3 v = normalize(cam_pos - frag_world_pos);
+	vec3 albedo = texture(albedo_map, uv).rgb;
+	vec3 l = normalize(light_pos - world_pos);
+	vec3 primary = light_col * albedo * max(0.1, dot(world_norm, l)) * light_intensity;
+	vec3 r = reflect(l, world_norm);
+	vec3 v = normalize(cam_pos - world_pos);
 	vec3 secondary = light_col * pow(max(0.0, dot(r, v)), 256.0) * light_intensity;
 	fragColor = vec4(primary + secondary, 1.0);
 }
@@ -103,6 +113,16 @@ public:
 	~Renderer();
 	void render();
 
+	void toggle_pause() {
+		if (rot_speed < 0.0001f) rot_speed = 1.0f;
+		else rot_speed = 0.0f;
+	}
+
+	void add_albedo_map(const fs::path& fp);
+
+	void add_object_from_fp(const fs::path& fp) {
+		m_objects.emplace_back(fp);
+	}
 	void set_window_size(int w, int h) {
 		camera.set_resolution(w, h);
 	}
@@ -127,8 +147,12 @@ private:
 	unsigned int m_light_col_uni;
 	unsigned int m_light_intensity_uni;
 
+	unsigned int m_albedo;
+	unsigned int m_normal;
+
 	// Light
 	vec3 light_pos{ 2.0, 4.0, 3.0 };
 	vec3 light_col{ 1.0 };
-	float light_intensity{ 1.0 };
+	float light_intensity{ 1.0f };
+	float rot_speed{ 1.0f };
 };

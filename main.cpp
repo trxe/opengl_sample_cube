@@ -2,6 +2,7 @@
 #include <string>
 
 #define TINYOBJLOADER_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Renderer.hpp"
@@ -20,6 +21,11 @@ static void glfw_callback_window_size(GLFWwindow* window, int width, int height)
 static void glfw_callback_scroll(GLFWwindow* window, double xoffset, double yoffset) {
 	Renderer* renderer = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(_window));
 	renderer->input_scroll(xoffset, yoffset);
+}
+static void glfw_callback_key(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	Renderer* renderer = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(_window));
+	if (key == GLFW_KEY_P && action == GLFW_PRESS)
+		renderer->toggle_pause();
 }
 
 
@@ -52,6 +58,9 @@ int main() {
 		glfwSetWindowUserPointer(_window, reinterpret_cast<void*>(&renderer));
 		glfwSetWindowSizeCallback(_window, glfw_callback_window_size);
 		glfwSetScrollCallback(_window, glfw_callback_scroll);
+		glfwSetKeyCallback(_window, glfw_callback_key);
+		renderer.add_object_from_fp(fs::current_path() / "data" / "sphere.obj");
+		renderer.add_albedo_map(fs::current_path() / "data" / "textures" / "Encrusted_Gems_002_SD"  / "Encrusted_Gems_002_COLOR.jpg");
 		while (!glfwWindowShouldClose(_window)) {
 			glfwPollEvents();
 			renderer.render();

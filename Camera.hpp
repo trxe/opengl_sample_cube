@@ -11,7 +11,7 @@ public:
 	const mat4& clip_matrix() { return m_clip_matrix; }
 	const mat4& view_matrix() { return m_view_matrix; }
 	void set_resolution(int w, int h);
-	float aspect_ratio() {
+	float aspect_ratio() const {
 		return (float)resolution.x / (float)resolution.y;
 	}
 	void zoom(float amount, float scale = 0.1f);
