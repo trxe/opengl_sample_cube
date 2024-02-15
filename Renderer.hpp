@@ -99,7 +99,7 @@ in vec2 uv;
 out vec4 fragColor;
 
 void main() {
-	vec3 albedo = texture(normal_map, uv).rgb;
+	vec3 albedo = texture(displacem, uv).rgb;
 	vec3 l = normalize(light_pos - world_pos);
 	vec3 primary = light_col * albedo * max(0.1, dot(world_norm, l)) * light_intensity;
 	vec3 r = reflect(l, world_norm);
