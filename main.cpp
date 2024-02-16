@@ -58,7 +58,7 @@ int main() {
 		glfwSetWindowSizeCallback(_window, glfw_callback_window_size);
 		glfwSetScrollCallback(_window, glfw_callback_scroll);
 		glfwSetKeyCallback(_window, glfw_callback_key);
-		renderer.add_object_from_fp(fs::current_path() / "data" / "sphere.obj");
+		renderer.add_object_from_fp(fs::current_path() / "data" / "box.obj");
 		renderer.set_map_dir(fs::current_path() / "data" / "textures" / "Encrusted_Gems_002_SD" , "Encrusted_Gems_002");
 		while (!glfwWindowShouldClose(_window)) {
 			glfwPollEvents();

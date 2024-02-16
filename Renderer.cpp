@@ -78,6 +78,7 @@ void Renderer::set_map_dir(const fs::path& dir, const char* prefix) {
 	std::string fp_displace = std::format("{}_{}.png", prefix, "DISP");
 	std::string fp_occlusion = std::format("{}_{}.jpg", prefix, "OCC");
 	m_material.set(dir, fp_albedo, fp_normal, fp_displace, fp_occlusion);
+	m_material.bind_and_use_textures(m_shader_program_id);
 }
 
 void Renderer::render() {

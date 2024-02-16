@@ -98,10 +98,28 @@ in vec2 uv;
 
 out vec4 fragColor;
 
+mat3 cotangent_frame( vec3 N, vec3 p, vec2 uv ) { 
+	// get edge vectors of the pixel triangle 
+	vec3 dp1 = dFdx( p ); 
+	vec3 dp2 = dFdy( p ); 
+	vec2 duv1 = dFdx( uv ); 
+	vec2 duv2 = dFdy( uv );   
+	// solve the linear system 
+	vec3 dp2perp = cross( dp2, N ); 
+	vec3 dp1perp = cross( N, dp1 ); 
+	vec3 T = dp2perp * duv1.x + dp1perp * duv2.x; 
+	vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;   
+	// construct a scale-invariant frame 
+	float invmax = inversesqrt( max( dot(T,T), dot(B,B) ) ); 
+	return mat3( T * invmax, B * invmax, N ); 
+}
+
 void main() {
-	vec3 albedo = texture(displacem, uv).rgb;
+	vec3 albedo = texture(albedo_map, uv).rgb;
+	mat3 perturb_frame = cotangent_frame(world_norm, world_pos, uv);
+	vec3 normal = perturb_frame * texture(normal_map, uv).rgb;
 	vec3 l = normalize(light_pos - world_pos);
-	vec3 primary = light_col * albedo * max(0.1, dot(world_norm, l)) * light_intensity;
+	vec3 primary = light_col * albedo * max(0.1, dot(normal, l)) * light_intensity;
 	vec3 r = reflect(l, world_norm);
 	vec3 v = normalize(cam_pos - world_pos);
 	vec3 secondary = light_col * pow(max(0.0, dot(r, v)), 256.0) * light_intensity;
