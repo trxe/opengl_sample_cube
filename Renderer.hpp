@@ -118,10 +118,12 @@ void main() {
 	vec3 albedo = texture(albedo_map, uv).rgb;
 	mat3 perturb_frame = cotangent_frame(world_norm, world_pos, uv);
 	vec3 normal = perturb_frame * texture(normal_map, uv).rgb;
-	vec3 l = normalize(light_pos - world_pos);
+	vec3 disp = perturb_frame * texture(displacement_map, uv).rgb;
+	vec3 p = world_pos + disp;
+	vec3 l = normalize(light_pos - p);
 	vec3 primary = light_col * albedo * max(0.1, dot(normal, l)) * light_intensity;
 	vec3 r = reflect(l, world_norm);
-	vec3 v = normalize(cam_pos - world_pos);
+	vec3 v = normalize(cam_pos - p);
 	vec3 secondary = light_col * pow(max(0.0, dot(r, v)), 256.0) * light_intensity;
 	fragColor = vec4(primary + secondary, 1.0);
 }
